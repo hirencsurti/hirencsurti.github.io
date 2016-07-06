@@ -1,11 +1,141 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>The Best Site</title>
+	<title>escapen</title>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <link rel="stylesheet" href="styles/normalize.css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="styles/html5bp.css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="styles/style.css" media="screen" charset="utf-8">
+  <link rel="stylesheet" type="text/css" href="styles/view.css" media="all">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="view.js"></script>
+<script type="text/javascript" src="calendar.js"></script>
 </head>
-<body>
-<h1>Welcome to The Best Site!</h1>
-<button>Test Button</button>
+    <body>
+        <header>
+          <section class="container">
+            <a href="#"><h1 class="logo">escapen</h1></a>
+            <div class="clearfix"></div>
+          </section>
+        </header>
+        <!-- end header -->
+
+        <!-- popup for loading icon and article detail -->
+        <div id="popUp" class="loader hidden">
+          <a href="#" class="closePopUp">X</a>
+          <div class="container">
+            <h1>Article title here</h1>
+            <p>
+              Article description/content here.
+            </p>
+            <a href="#" class="popUpAction" target="_blank">Read more from source</a>
+          </div>
+        </div>
+        <!-- end popup -->
+
+  <div id="form_container">
+  
+    <h1><a>Untitled Form</a></h1>
+    <form id="form_1143858" class="appnitro"  method="post" action="">
+          <div class="form_description">
+      <h2>Let's take you away!</h2>
+      <p></p>
+    </div>            
+      <ul >
+      
+          <li id="li_1" >
+    <label class="description" for="element_1">Origin </label>
+    <div>
+      <input id="element_1" name="element_1" class="element text small" type="text" maxlength="255" value=""/> 
+    </div> 
+    </li>   <li id="li_2" >
+    <label class="description" for="element_2">Max Price </label>
+    <div>
+      <input id="element_2" name="element_2" class="element text small" type="text" maxlength="255" value=""/> 
+    </div>  <li id="li_5" >
+    <label class="description" for="element_5">Duration (in days) </label>
+    <div>
+      <input id="element_5" name="element_5" class="element text small" type="text" maxlength="255" value=""/> 
+    </div>
+    </li>   <li id="li_3" >
+    <label class="description" for="element_3">Departure Date Start</label>
+    <span>
+      <input id="element_3_1" name="element_3_1" class="element text" size="2" maxlength="2" value="" type="text"> /
+      <label for="element_3_1">MM</label>
+    </span>
+    <span>
+      <input id="element_3_2" name="element_3_2" class="element text" size="2" maxlength="2" value="" type="text"> /
+      <label for="element_3_2">DD</label>
+    </span>
+    <span>
+      <input id="element_3_3" name="element_3_3" class="element text" size="4" maxlength="4" value="" type="text">
+      <label for="element_3_3">YYYY</label>
+    </span>
+  
+    <span id="calendar_3">
+      <img id="cal_img_3" class="datepicker" src="calendar.gif" alt="Pick a date."> 
+    </span>
+    <script type="text/javascript">
+      Calendar.setup({
+      inputField   : "element_3_3",
+      baseField    : "element_3",
+      displayArea  : "calendar_3",
+      button     : "cal_img_3",
+      ifFormat   : "%B %e, %Y",
+      onSelect   : selectDate
+      });
+    </script>
+     
+    </li>   <li id="li_4" >
+    <label class="description" for="element_4">Departure Date End</label>
+    <span>
+      <input id="element_4_1" name="element_4_1" class="element text" size="2" maxlength="2" value="" type="text"> /
+      <label for="element_4_1">MM</label>
+    </span>
+    <span>
+      <input id="element_4_2" name="element_4_2" class="element text" size="2" maxlength="2" value="" type="text"> /
+      <label for="element_4_2">DD</label>
+    </span>
+    <span>
+      <input id="element_4_3" name="element_4_3" class="element text" size="4" maxlength="4" value="" type="text">
+      <label for="element_4_3">YYYY</label>
+    </span>
+  
+    <span id="calendar_4">
+      <img id="cal_img_4" class="datepicker" src="calendar.gif" alt="Pick a date."> 
+    </span>
+    <script type="text/javascript">
+      Calendar.setup({
+      inputField   : "element_4_3",
+      baseField    : "element_4",
+      displayArea  : "calendar_4",
+      button     : "cal_img_4",
+      ifFormat   : "%B %e, %Y",
+      onSelect   : selectDate
+      });
+    </script>
+     
+    </li>
+      
+          <li class="buttons">
+          <input type="hidden" name="form_id" value="1143858" />
+          
+        <input id="saveForm" class="button_text" type="submit" name="submit" value="Submit" />
+    </li>
+      </ul>
+    </form> 
+
+  </div>
+
+        <section id="main" class="container">
+
+          <!-- articles rendered here -->
+        
+        </section>
+
+
 <script type="text/javascript" src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
 <script type="text/javascript" src="app.js"></script>
 </body>
