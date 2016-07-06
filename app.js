@@ -1,3 +1,7 @@
+_500px.init({
+  sdk_key: '283fcd023d6b52589e68a447c00af9815233cf77'
+});
+
 var URL = "https://api.sandbox.amadeus.com/v1.2/flights/inspiration-search"
 var flights = [];
 var origin;
@@ -6,17 +10,90 @@ var departureStartDt;
 var departureEndDt;
 var duration;
 
-var airportURL = "https://airport.api.aero/airport/";
 
-//airportURL += destination;
-airportURL += "JFK";
+var airport;
+var city = "";
+var country;
+var lat;
+var long;
+var airportName;
+var timezone;
 
+function handle500response(res) {
 
-$.get(airportURL,{user_key: "91c9414bce889daadd506979fd3e9297"},function(response){
-    //response.addHeader("Access-Control-Allow-Origin", "*");
-    console.log(response);
-})
+  var images = res.data.photos
 
+  images.forEach(function(image) {
+    var imgUrl = image.image_url;
+
+    var $image = $('<img>').attr("src",imgUrl).addClass('image');
+
+    console.log($image);
+
+    $('.rightside').empty();
+
+    $image.appendTo('.rightside');
+
+  })
+}
+
+function addPhoto(lat,long){
+
+  var radius = '25mi';
+
+  var searchOptions = {
+    geo: lat + ',' + long + ',' + radius,
+    only: 'Landscapes',
+    image_size: 3,
+    rpp: 1
+  };
+
+  _500px.api('/photos/search',searchOptions, function(response) {
+    handle500response(response);
+  })
+
+}
+
+function compilePopUp(airportURL,origin,destination,deptDt,returnDt,price,kayakUrl) {
+
+  $.ajax({
+      url: airportURL + "?user_key=91c9414bce889daadd506979fd3e9297",
+      type: 'GET',
+      crossDomain: true,
+      dataType: 'jsonp',
+      success: handleResponseAirport,
+      error: function() { alert('Failed!'); },
+  });
+
+  // Render the flight in the detail view.
+  $('#popUp h1').html(origin + ' to ' + destination);
+  $('#popUp h2').html('Departure: ' + deptDt + ' -> Return: ' + returnDt);
+  $('#popUp p.flightprices').html("From $" + price);
+  $('#popUp a.popUpAction').attr('href', kayakUrl);
+
+  setView('detail');
+}
+
+function handleResponseAirport(response) {
+  airport = response.airports[0];
+  console.log(airport);
+
+  airportName = airport.name;
+  city = airport.city;
+  country = airport.country;
+  lat = airport.lat;
+  long = airport.lng;
+  timezone = airport.timezone;
+
+  $('#popUp p.airportname').html("Destination Airport: " + airportName);
+  $('#popUp p.city').html("City: " + city);
+  $('#popUp p.country').html("Country: " + country);
+  $('#popUp p.lat').html("Lat: " + lat);
+  $('#popUp p.long').html("Long: " + long);
+  $('#popUp p.timezone').html("Timezone: " + timezone);
+
+  addPhoto(lat,long);
+}
 
 function findOrigin(input){
   return input.name === "element_1";
@@ -90,9 +167,6 @@ function flightToHTML(flight) {
 	imgUrl = "https://cdn1.vtourist.com/13/2729826-The_Rainbow_Room-New_York_City.jpg"
 
   return '<flight class="flight">' +
-         '  <section class="featuredImage">' +
-         '    <img src="' + imgUrl + '" alt="" />' +
-         '  </section>' +
          '  <section class="flightContent">' +
          '    <a href="#"><h3>' + origin + ' to ' + flight.destination + '</h3></a>' +
          '    <h6>Departure: ' + flight.departure_date + ' -> Return: ' + flight.return_date + '</h6>' +
@@ -154,9 +228,6 @@ function handleResponseSuccess(response) {
 // Go to article detail
 $('#main.container').on('click', '.flight a', function(event) {
 
-  // Get the right article object, which we can do because the 
-  // article elements in the feed in the DOM will be in the 
-  // same order as the ones in the articles array.
   var index = $(this).parent().parent().index();
   var flight = flights[index];
 
@@ -167,13 +238,11 @@ $('#main.container').on('click', '.flight a', function(event) {
 
   var kayakUrl = ("https://www.kayak.com/flights/" + origin + "-" + destination + "/" +  deptDt + "/" + returnDt);
 
-  // Render the article in the detail view.
-  $('#popUp h1').html(origin + ' to ' + destination);
-  $('#popUp h2').html('Departure: ' + deptDt + ' -> Return: ' + returnDt);
-  $('#popUp p').html("From $" + price);
-  $('#popUp a.popUpAction').attr('href', kayakUrl);
+  var airportURL = "https://airport.api.aero/airport/";
+  airportURL += destination;
 
-  setView('detail');
+  compilePopUp(airportURL,origin,destination,deptDt,returnDt,price,kayakUrl);
+
 });
 
 // Go back to main feed when `X` is clicked in popup
@@ -201,4 +270,11 @@ $('#form_1143858').on('submit', function(e) {
     })
 
 });
+
+
+
+
+
+
+
 
