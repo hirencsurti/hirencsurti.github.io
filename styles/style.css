@@ -41,6 +41,11 @@
   margin-bottom: 0;
 }
 
+#popUp h2 {
+  font-size: 20px;
+  margin-bottom: 0;
+}
+
 #popUp .popUpAction {
   padding: 10px;
   background-color: #FE052C;

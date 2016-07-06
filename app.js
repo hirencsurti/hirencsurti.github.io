@@ -1,10 +1,21 @@
-URL = "https://api.sandbox.amadeus.com/v1.2/flights/inspiration-search"
+var URL = "https://api.sandbox.amadeus.com/v1.2/flights/inspiration-search"
 var flights = [];
 var origin;
 var maxPrice;
 var departureStartDt;
 var departureEndDt;
 var duration;
+
+var airportURL = "https://airport.api.aero/airport/";
+
+//airportURL += destination;
+airportURL += "JFK";
+
+
+$.get(airportURL,{user_key: "91c9414bce889daadd506979fd3e9297"},function(response){
+    //response.addHeader("Access-Control-Allow-Origin", "*");
+    console.log(response);
+})
 
 
 function findOrigin(input){
@@ -73,12 +84,6 @@ function assignParams(data){
 
   departureEndDt = data.find(findDepartureEndYr).value + '-' + data.find(findDepartureEndMo).value + '-' + departureEndDay;
 
-  // console.log(origin);
-  // console.log(maxPrice);
-  // console.log(duration);
-  // console.log(departureStartDt);
-  // console.log(departureEndDt);
-
 }
 
 function flightToHTML(flight) {
@@ -89,7 +94,7 @@ function flightToHTML(flight) {
          '    <img src="' + imgUrl + '" alt="" />' +
          '  </section>' +
          '  <section class="flightContent">' +
-         '    <a href="#"><h3>NYC to ' + flight.destination + '</h3></a>' +
+         '    <a href="#"><h3>' + origin + ' to ' + flight.destination + '</h3></a>' +
          '    <h6>Departure: ' + flight.departure_date + ' -> Return: ' + flight.return_date + '</h6>' +
          '  </section>' +
          '  <section class="impressions">From $' +
@@ -114,10 +119,7 @@ function setView(viewType) {
     $popup.addClass('hidden');
   } 
   else {
-    // This `else` clause is optional but useful
-    // if you (the programmer) forget the system 
-    // of viewTypes that you worked out, and 
-    // use a wrong one.
+
     throw new Error("Only acceptable arguments to setView " +
                     "are 'loader', 'detail' and 'feed'");
   }
@@ -127,7 +129,7 @@ function renderFlights() {
   // Remove existing flights from DOM
   $('#main').empty();
 
-  // Add new articles to DOM
+  // Add new flights to DOM
   flights.forEach(function(flight) {
     var renderedHTML = flightToHTML(flight)
     $('#main').append(renderedHTML);
@@ -158,10 +160,18 @@ $('#main.container').on('click', '.flight a', function(event) {
   var index = $(this).parent().parent().index();
   var flight = flights[index];
 
+  var destination = flight.destination;
+  var deptDt = flight.departure_date;
+  var returnDt = flight.return_date;
+  var price = flight.price;
+
+  var kayakUrl = ("https://www.kayak.com/flights/" + origin + "-" + destination + "/" +  deptDt + "/" + returnDt);
+
   // Render the article in the detail view.
-  $('#popUp h1').html('NYC to ' + flight.destination);
-  $('#popUp p').html("From $" + flight.price);
-  $('#popUp a.popUpAction').attr('href', 'www.google.com');
+  $('#popUp h1').html(origin + ' to ' + destination);
+  $('#popUp h2').html('Departure: ' + deptDt + ' -> Return: ' + returnDt);
+  $('#popUp p').html("From $" + price);
+  $('#popUp a.popUpAction').attr('href', kayakUrl);
 
   setView('detail');
 });
